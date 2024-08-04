@@ -1,0 +1,19 @@
+#include <stdio.h>
+
+int main() {
+    int numbers[] = {18, 45, 66, 23, 19, 10, 52, 71}; // The given set of numbers
+    int size = sizeof(numbers) / sizeof(numbers[0]); // Calculate the size of the array
+    int min = numbers[0]; // Initialize min to the first element of the array
+
+    // Iterate through the array to find the smallest number
+    for (int i = 1; i < size; i++) {
+        if (numbers[i] < min) {
+            min = numbers[i];
+        }
+    }
+
+    // Print the smallest number
+    printf("The smallest number in the given set is: %d\n", min);
+
+    return 0;
+}
