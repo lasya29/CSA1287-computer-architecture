@@ -1,0 +1,81 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <unistd.h>
+
+// Function to simulate CPU performance metrics
+void simulate_cpu_performance(int num_tasks) {
+    // Simulating response time (time from task submission to first response)
+    double response_times[num_tasks];
+    
+    // Simulating execution time (time taken to complete a task)
+    double execution_times[num_tasks];
+    
+    // Simulating throughput (number of tasks completed in a given period)
+    int completed_tasks = 0;
+    
+    struct timespec start_time, end_time;
+    
+    clock_gettime(CLOCK_MONOTONIC, &start_time);
+    
+    for (int i = 0; i < num_tasks; i++) {
+        struct timespec task_start_time, task_end_time;
+        
+        clock_gettime(CLOCK_MONOTONIC, &task_start_time);
+        
+        // Simulate task execution with random delay
+        double execution_time = ((double)rand() / RAND_MAX) * 0.9 + 0.1;  // random execution time between 0.1 and 1.0 seconds
+        usleep((int)(execution_time * 1000000));
+        
+        clock_gettime(CLOCK_MONOTONIC, &task_end_time);
+        
+        // Record execution time
+        execution_times[i] = execution_time;
+        
+        // Record response time (for simplicity, assuming it's the same as execution time here)
+        response_times[i] = (task_end_time.tv_sec - task_start_time.tv_sec) + 
+                            (task_end_time.tv_nsec - task_start_time.tv_nsec) / 1000000000.0;
+        
+        completed_tasks++;
+    }
+    
+    clock_gettime(CLOCK_MONOTONIC, &end_time);
+    
+    double total_time = (end_time.tv_sec - start_time.tv_sec) + 
+                        (end_time.tv_nsec - start_time.tv_nsec) / 1000000000.0;
+    
+    // Calculate average response time
+    double avg_response_time = 0;
+    for (int i = 0; i < num_tasks; i++) {
+        avg_response_time += response_times[i];
+    }
+    avg_response_time /= num_tasks;
+    
+    // Calculate average execution time
+    double avg_execution_time = 0;
+    for (int i = 0; i < num_tasks; i++) {
+        avg_execution_time += execution_times[i];
+    }
+    avg_execution_time /= num_tasks;
+    
+    // Calculate throughput (tasks per second)
+    double throughput = completed_tasks / total_time;
+    
+    // Print the results
+    printf("Average Response Time: %.2f seconds\n", avg_response_time);
+    printf("Average Execution Time: %.2f seconds\n", avg_execution_time);
+    printf("Throughput: %.2f tasks/second\n", throughput);
+}
+
+int main() {
+    // Seed the random number generator
+    srand(time(NULL));
+    
+    // Number of tasks to simulate
+    int num_tasks = 100;
+    
+    // Simulate CPU performance metrics
+    simulate_cpu_performance(num_tasks);
+    
+    return 0;
+}
