@@ -1,0 +1,25 @@
+#include <stdio.h>
+
+// Function to calculate the total clock cycles required for a given number of operations
+int calculate_clock_cycles(int num_operations) {
+    // Initial latency for the first operation to go through all stages
+    int initial_latency = 3; // F, D, E stages for the first operation
+    
+    // After the initial latency, each additional operation requires one extra clock cycle
+    int total_cycles = initial_latency + (num_operations - 1);
+    
+    return total_cycles;
+}
+
+int main() {
+    // Number of arithmetic operations
+    int num_operations = 5; // You can change this value to simulate different scenarios
+    
+    // Calculate the total clock cycles required
+    int total_cycles = calculate_clock_cycles(num_operations);
+    
+    // Print the result
+    printf("Total clock cycles required for %d operations: %d\n", num_operations, total_cycles);
+    
+    return 0;
+}
